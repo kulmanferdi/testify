@@ -17,8 +17,8 @@ namespace testify
             Console.WriteLine("--------------------------------------");
             Console.WriteLine("0. Exit");
             Console.WriteLine("1. Generate tests");
-            Console.WriteLine("2. Check if word is in the input file");
-            Console.WriteLine("3. Count a word in every output files");
+            Console.WriteLine("2. Check if a word is in the input file");
+            Console.WriteLine("3. Count a word in every output file");
             Console.WriteLine("--------------------------------------");            
         }
 
@@ -108,6 +108,8 @@ namespace testify
                 Console.WriteLine("{0} is in the inputfile.", searchedWord);
             }
             else Console.WriteLine("{0} is not in the inputfile.", searchedWord);
+            Console.WriteLine(" Press any key to continue.");
+            Console.ReadKey();
         }        
 
         private void countInOutputs()
@@ -125,14 +127,16 @@ namespace testify
                 sr.Close();
             }
             Console.WriteLine("{0} output file contains the \"{1}\" word.", count, searchedWord);
+            Console.WriteLine(" Press any key to continue.");
+            Console.ReadKey();
         }
 
         public void Run()
         {            
+            init();
             short selection;
             do
             {
-                init();
                 printMenu();
                 do
                 {
@@ -145,6 +149,7 @@ namespace testify
                     case 2: checkInInput(); break;
                     case 3: countInOutputs(); break;
                 }
+                Console.Clear();
             } while (selection != 0);
         }
     }
