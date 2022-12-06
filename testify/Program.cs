@@ -6,31 +6,32 @@ namespace testify
 {
     internal class App
     {       
-        public void main()
+        public void Main()
         {
-            Random random = new Random();
-
-            //initial variables
+            //declarations and initializing
             string fileName, folderName, path;
-            short lineNumber = 1, testNumber, wordNumber;
-
-            //initial lists
+            short lineNumber = 0, testNumber, wordNumber;
+            int randomNumber;
+            
             List<Dictionary> dictList = new List<Dictionary>();
-            List<int> used = new List<int>();
             List<string> outputList = new List<string>();
 
-            //reading the name of the input file
+            Random random = new Random();
+
+            //reading the name of the input file/path
             Console.Write("Please enter the filename: ");
             fileName = Console.ReadLine();
 
-            //reading the words
+            //reading the words, every word is added once
             StreamReader sr = new StreamReader(fileName);
             while (!sr.EndOfStream)
             { 
                 string currentWord = sr.ReadLine();
-                Dictionary dict = new Dictionary(lineNumber, currentWord);
-                dictList.Add(dict);
-                lineNumber++;
+                if (!dictList.Any(Dictionary => Dictionary.GetWord() == currentWord))
+                {
+                    Dictionary dict = new Dictionary(lineNumber++, currentWord);
+                    dictList.Add(dict);
+                }
             }
             sr.Close();
 
@@ -48,16 +49,16 @@ namespace testify
             if (!String.IsNullOrEmpty(folderName)) path = folderName + "\\out";
             else path = "out";
 
+            //generating the different outputs
             for (short i = 1; i <= testNumber; ++i)
             {
                 //fill up the output list with random words
                 for (short j = 1; j <= wordNumber; ++j)
                 {
-                    int n = random.Next(1, lineNumber + 1);
-                    if (!used.Contains(n))
+                    randomNumber = random.Next(1, lineNumber + 1);
+                    if (!outputList.Contains(dictList[randomNumber].GetWord()))
                     {
-                        outputList.Add(dictList[n].GetWord());
-                        used.Add(n);
+                        outputList.Add(dictList[randomNumber].GetWord());
                     }
                 }
 
@@ -69,10 +70,7 @@ namespace testify
                     sw.WriteLine(outputList[temp]);
                     temp++;
                 }
-                sw.Close();
-
-                //clearing the lists before the next iteration
-                used.Clear();
+                sw.Close();                
                 outputList.Clear();
             }
             dictList.Clear();
