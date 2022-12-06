@@ -1,12 +1,14 @@
 ﻿using System;
 using System.IO;
+using System.Text;
 using static testify.Dictionary;
 
 namespace testify
 {
     internal class Menu
     {
-        private string fileName, folderName, path;
+        private string inputFile, folderName, path;
+        private short testNumber;
         private List<Dictionary> dictList = new List<Dictionary>();
 
         private void printMenu() 
@@ -16,19 +18,23 @@ namespace testify
             Console.WriteLine("0. Exit");
             Console.WriteLine("1. Generate tests");
             Console.WriteLine("2. Check if word is in the input file");
-            Console.WriteLine("3. Check if word is in the output file");
-            Console.WriteLine("4. Count a word in every output files");
+            Console.WriteLine("3. Count a word in every output files");
             Console.WriteLine("--------------------------------------");            
         }
 
         private void init()
         {
-            //reading the name of the input file/path
+            //reading the name of the input fileű
+            StringBuilder pathString = new();
+            pathString.Append("input\\");
             Console.Write("Please enter the name of the input file: ");
-            fileName = Console.ReadLine();
+            pathString.Append(Console.ReadLine());
+            pathString.Append(".txt");
+            inputFile = pathString.ToString();
+            
 
             //reading the words, every word is added once
-            StreamReader sr = new StreamReader(fileName);
+            StreamReader sr = new StreamReader(inputFile);
             while (!sr.EndOfStream)
             {
                 string currentWord = sr.ReadLine();
@@ -50,7 +56,7 @@ namespace testify
         private void generateTests()
         {
             //declarations and initializing            
-            short testNumber, wordNumber;
+            short wordNumber;
             int randomNumber;
             
             List<string> outputList = new List<string>();
@@ -97,21 +103,31 @@ namespace testify
         private void checkInInput()
         {
             Console.Write("Enter the searched word: ");
-            string word = Console.ReadLine();
-            if (dictList.Any(Dictionary => Dictionary.GetWord() == word))
+            string currentWord = Console.ReadLine();
+            if (dictList.Any(Dictionary => Dictionary.GetWord() == currentWord))
             {
-                Console.WriteLine("{0} is in the inputfile.", word);
+                Console.WriteLine("{0} is in the inputfile.", currentWord);
             }
-            else Console.WriteLine("{0} is not in the inputfile.", word);
-        }
-
-        private void checkInOutput()
-        { 
-
-        }
+            else Console.WriteLine("{0} is not in the inputfile.", currentWord);
+        }        
 
         private void countInOutputs()
-        { }
+        {
+            Console.Write("Enter the searched word: ");
+            string currentWord = Console.ReadLine();
+            int count = 0;
+            for (short i = 1; i <= testNumber; ++i)
+            {
+                StreamReader sr = new StreamReader(path + i.ToString()+".txt");
+                while (!sr.EndOfStream)
+                { 
+                    currentWord = sr.ReadLine();
+                    if(!dictList.Any(Dictionary => Dictionary.GetWord() == currentWord)) count++;
+                }
+                sr.Close();
+            }
+            Console.WriteLine("{0} output file contains the \"{1}\" word.", count, currentWord);
+        }
 
         public void Run()
         {            
@@ -124,13 +140,12 @@ namespace testify
                 {
                     Console.Write("Select an option: ");
                     selection = Convert.ToInt16(Console.ReadLine());
-                } while (selection < 0 | selection > 4);
+                } while (selection < 0 | selection > 3);
                 switch (selection)
                 {
                     case 1: generateTests(); break;
                     case 2: checkInInput(); break;
-                    case 3: checkInOutput(); break;
-                    case 4: countInOutputs(); break;
+                    case 3: countInOutputs(); break;
                 }
             } while (selection != 0);
         }
