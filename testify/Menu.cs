@@ -6,6 +6,9 @@ namespace testify
 {
     internal class Menu
     {
+        private string fileName, folderName, path;
+        private List<Dictionary> dictList = new List<Dictionary>();
+
         private void printMenu() 
         {
             Console.WriteLine("                 MENU");
@@ -19,40 +22,21 @@ namespace testify
 
         private void generateTests()
         {
-            //declarations and initializing
-            string fileName, folderName, path;
+            //declarations and initializing            
             short testNumber, wordNumber;
             int randomNumber;
-
-            List<Dictionary> dictList = new List<Dictionary>();
+            
             List<string> outputList = new List<string>();
 
-            Random random = new Random();
-
-            //reading the name of the input file/path
-            Console.Write("Please enter the filename: ");
-            fileName = Console.ReadLine();
-
-            //reading the words, every word is added once
-            StreamReader sr = new StreamReader(fileName);
-            while (!sr.EndOfStream)
-            {
-                string currentWord = sr.ReadLine();
-                if (!dictList.Any(Dictionary => Dictionary.GetWord() == currentWord))
-                {
-                    Dictionary dict = new Dictionary(dictList.Count() + 1, currentWord);
-                    dictList.Add(dict);
-                }
-            }
-            sr.Close();
+            Random random = new Random();           
 
             //the amount of tests, that needs to generated
             Console.Write("Number of tests: ");
-            testNumber = Convert.ToInt16(sr.ReadLine());
+            testNumber = Convert.ToInt16(Console.ReadLine());
 
             //the number of words in the test
             Console.Write("Number of words: ");
-            wordNumber = Convert.ToInt16(sr.ReadLine());
+            wordNumber = Convert.ToInt16(Console.ReadLine());
 
             //choosing the destination folder, then set the path
             Console.Write("Please enter the destination folder name: ");
@@ -88,10 +72,29 @@ namespace testify
 
             Console.WriteLine("{0} tests are generated succesfully. Press any key to continue.", testNumber);            
         }
-
-        public void Run()
+        private void init()
         {
+            //reading the name of the input file/path
+            Console.Write("Please enter the filename: ");
+            fileName = Console.ReadLine();
+
+            //reading the words, every word is added once
+            StreamReader sr = new StreamReader(fileName);
+            while (!sr.EndOfStream)
+            {
+                string currentWord = sr.ReadLine();
+                if (!dictList.Any(Dictionary => Dictionary.GetWord() == currentWord))
+                {
+                    Dictionary dict = new Dictionary(dictList.Count() + 1, currentWord);
+                    dictList.Add(dict);
+                }
+            }
+            sr.Close();
+        }
+        public void Run()
+        {            
             short selection;
+            init();
             printMenu();
             do
             {
