@@ -13,11 +13,38 @@ namespace testify
         {
             Console.WriteLine("                 MENU");
             Console.WriteLine("--------------------------------------");
+            Console.WriteLine("0. Exit");
             Console.WriteLine("1. Generate tests");
             Console.WriteLine("2. Check if word is in the input file");
             Console.WriteLine("3. Check if word is in the output file");
             Console.WriteLine("4. Count a word in every output files");
             Console.WriteLine("--------------------------------------");            
+        }
+
+        private void init()
+        {
+            //reading the name of the input file/path
+            Console.Write("Please enter the name of the input file: ");
+            fileName = Console.ReadLine();
+
+            //reading the words, every word is added once
+            StreamReader sr = new StreamReader(fileName);
+            while (!sr.EndOfStream)
+            {
+                string currentWord = sr.ReadLine();
+                if (!dictList.Any(Dictionary => Dictionary.GetWord() == currentWord))
+                {
+                    Dictionary dict = new Dictionary(dictList.Count() + 1, currentWord);
+                    dictList.Add(dict);
+                }
+            }
+            sr.Close();
+
+            //choosing the destination folder, then set the path
+            Console.Write("Please enter the name of the destination folder: ");
+            folderName = Console.ReadLine();
+            if (!String.IsNullOrEmpty(folderName)) path = folderName + "\\out";
+            else path = "out";
         }
 
         private void generateTests()
@@ -36,13 +63,7 @@ namespace testify
 
             //the number of words in the test
             Console.Write("Number of words: ");
-            wordNumber = Convert.ToInt16(Console.ReadLine());
-
-            //choosing the destination folder, then set the path
-            Console.Write("Please enter the destination folder name: ");
-            folderName = Console.ReadLine();
-            if (!String.IsNullOrEmpty(folderName)) path = folderName + "\\out";
-            else path = "out";
+            wordNumber = Convert.ToInt16(Console.ReadLine());           
 
             //generating the different outputs
             for (short i = 1; i <= testNumber; ++i)
@@ -72,44 +93,46 @@ namespace testify
 
             Console.WriteLine("{0} tests are generated succesfully. Press any key to continue.", testNumber);            
         }
-        private void init()
-        {
-            //reading the name of the input file/path
-            Console.Write("Please enter the filename: ");
-            fileName = Console.ReadLine();
 
-            //reading the words, every word is added once
-            StreamReader sr = new StreamReader(fileName);
-            while (!sr.EndOfStream)
+        private void checkInInput()
+        {
+            Console.Write("Enter the searched word: ");
+            string word = Console.ReadLine();
+            if (dictList.Any(Dictionary => Dictionary.GetWord() == word))
             {
-                string currentWord = sr.ReadLine();
-                if (!dictList.Any(Dictionary => Dictionary.GetWord() == currentWord))
-                {
-                    Dictionary dict = new Dictionary(dictList.Count() + 1, currentWord);
-                    dictList.Add(dict);
-                }
+                Console.WriteLine("{0} is in the inputfile.", word);
             }
-            sr.Close();
+            else Console.WriteLine("{0} is not in the inputfile.", word);
         }
+
+        private void checkInOutput()
+        { 
+
+        }
+
+        private void countInOutputs()
+        { }
+
         public void Run()
         {            
             short selection;
-            init();
-            printMenu();
             do
             {
-                Console.Write("Select an option: ");
-                selection = Convert.ToInt16(Console.ReadLine());
-            }while(selection < 0 | selection > 4);
-            switch (selection)
-            {
-                case 1:generateTests();break;
-                case 2: break;
-                case 3: break;
-                case 4: break;
-                case 0: break;
-                default: break;
-            }
+                init();
+                printMenu();
+                do
+                {
+                    Console.Write("Select an option: ");
+                    selection = Convert.ToInt16(Console.ReadLine());
+                } while (selection < 0 | selection > 4);
+                switch (selection)
+                {
+                    case 1: generateTests(); break;
+                    case 2: checkInInput(); break;
+                    case 3: checkInOutput(); break;
+                    case 4: countInOutputs(); break;
+                }
+            } while (selection != 0);
         }
     }
 }
