@@ -10,7 +10,7 @@ namespace testify
         {
             //declarations and initializing
             string fileName, folderName, path;
-            short lineNumber = 0, testNumber, wordNumber;
+            short testNumber, wordNumber;
             int randomNumber;
             
             List<Dictionary> dictList = new List<Dictionary>();
@@ -28,14 +28,14 @@ namespace testify
             { 
                 string currentWord = sr.ReadLine();
                 if (!dictList.Any(Dictionary => Dictionary.GetWord() == currentWord))
-                {
-                    Dictionary dict = new Dictionary(lineNumber++, currentWord);
+                {   
+                    Dictionary dict = new Dictionary(dictList.Count() + 1, currentWord);
                     dictList.Add(dict);
                 }
             }
             sr.Close();
 
-            //the amount of test, that needs to generated
+            //the amount of tests, that needs to generated
             Console.Write("Number of tests: ");
             testNumber = Convert.ToInt16(sr.ReadLine());
 
@@ -55,7 +55,7 @@ namespace testify
                 //fill up the output list with random words
                 for (short j = 1; j <= wordNumber; ++j)
                 {
-                    randomNumber = random.Next(1, lineNumber + 1);
+                    randomNumber = random.Next(1, dictList.Count() + 1);
                     if (!outputList.Contains(dictList[randomNumber].GetWord()))
                     {
                         outputList.Add(dictList[randomNumber].GetWord());
