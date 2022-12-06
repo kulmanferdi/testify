@@ -6,15 +6,13 @@ namespace testify
 {
     internal class App
     {       
-        public void main(string[] args)
+        public void main()
         {
             Random random = new Random();
 
             //initial variables
-            string fileName = "";
-            short lineNumber = 1;
-            short testNumber = 0;
-            short wordNumber = 0;
+            string fileName, folderName, path;
+            short lineNumber = 1, testNumber, wordNumber;
 
             //initial lists
             List<Dictionary> dictList = new List<Dictionary>();
@@ -36,14 +34,23 @@ namespace testify
             }
             sr.Close();
 
+            //the amount of test, that needs to generated
             Console.Write("Number of tests: ");
             testNumber = Convert.ToInt16(sr.ReadLine());
 
+            //the number of words in the test
             Console.Write("Number of words: ");
             wordNumber = Convert.ToInt16(sr.ReadLine());
 
+            //choosing the destination folder, then set the path
+            Console.Write("Please enter the destination folder name: ");
+            folderName = Console.ReadLine();
+            if (!String.IsNullOrEmpty(folderName)) path = folderName + "\\out";
+            else path = "out";
+
             for (int i = 1; i <= testNumber; ++i)
             {
+                //fill up the output list with random words
                 for (int j = 1; j <= wordNumber; ++j)
                 {
                     int n = random.Next(1, lineNumber + 1);
@@ -53,17 +60,24 @@ namespace testify
                         used.Add(n);
                     }
                 }
-                StreamWriter sw = new StreamWriter("out"+i+".txt");
+
+                //create an output file
+                StreamWriter sw = new StreamWriter(path + i.ToString() + ".txt");
                 int temp = 0;
                 while (temp < wordNumber)
                 {
                     sw.WriteLine(outputList[temp]);
                     temp++;
                 }
+                sw.Close();
+
+                //clearing the lists before the next iteration
                 used.Clear();
                 outputList.Clear();
             }
-            Console.WriteLine("{0} tests are generated succesfully.", testNumber);
+                        
+            Console.WriteLine("{0} tests are generated succesfully. Press any key to continue.", testNumber);
+            dictList.Clear();
             Console.ReadKey();
         }
     }
