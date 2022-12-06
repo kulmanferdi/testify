@@ -36,11 +36,10 @@ namespace testify
             //reading the words, every word is added once
             StreamReader sr = new StreamReader(inputFile);
             while (!sr.EndOfStream)
-            {
-                string currentWord = sr.ReadLine();
-                if (!dictList.Any(Dictionary => Dictionary.GetWord() == currentWord))
+            {                
+                if (!dictList.Any(Dictionary => Dictionary.GetWord() == sr.ReadLine()))
                 {
-                    Dictionary dict = new Dictionary(dictList.Count() + 1, currentWord);
+                    Dictionary dict = new Dictionary(dictList.Count() + 1, sr.ReadLine());
                     dictList.Add(dict);
                 }
             }
@@ -103,30 +102,29 @@ namespace testify
         private void checkInInput()
         {
             Console.Write("Enter the searched word: ");
-            string currentWord = Console.ReadLine();
-            if (dictList.Any(Dictionary => Dictionary.GetWord() == currentWord))
+            string searchedWord = Console.ReadLine();
+            if (dictList.Any(Dictionary => Dictionary.GetWord() == searchedWord))
             {
-                Console.WriteLine("{0} is in the inputfile.", currentWord);
+                Console.WriteLine("{0} is in the inputfile.", searchedWord);
             }
-            else Console.WriteLine("{0} is not in the inputfile.", currentWord);
+            else Console.WriteLine("{0} is not in the inputfile.", searchedWord);
         }        
 
         private void countInOutputs()
         {
             Console.Write("Enter the searched word: ");
-            string currentWord = Console.ReadLine();
+            string searchedWord = Console.ReadLine();
             int count = 0;
             for (short i = 1; i <= testNumber; ++i)
             {
                 StreamReader sr = new StreamReader(path + i.ToString()+".txt");
                 while (!sr.EndOfStream)
-                { 
-                    currentWord = sr.ReadLine();
-                    if(!dictList.Any(Dictionary => Dictionary.GetWord() == currentWord)) count++;
+                {                     
+                    if(sr.ReadLine().Equals(searchedWord)) count++;
                 }
                 sr.Close();
             }
-            Console.WriteLine("{0} output file contains the \"{1}\" word.", count, currentWord);
+            Console.WriteLine("{0} output file contains the \"{1}\" word.", count, searchedWord);
         }
 
         public void Run()
