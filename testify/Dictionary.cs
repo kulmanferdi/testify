@@ -61,6 +61,7 @@ namespace testify
         {
             return nthWord.ToString() + ": " + word;
         }
+
         /// <summary>
         /// Method <c>Equals</c> checks whether the words of two different objects are the same or not
         /// </summary>
