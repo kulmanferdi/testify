@@ -71,7 +71,7 @@ namespace testify
         {
             Dictionary d = obj as Dictionary;
             if (d == null) return false;
-            else return base.Equals((Point)obj) && word == d.word;         
+            else return base.Equals((Dictionary)obj) && word == d.word;
         }
     }
 }

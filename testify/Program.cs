@@ -19,7 +19,7 @@ namespace testify
             List<int> used = new List<int>();
             List<string> outputList = new List<string>();
 
-            //reading the input filename/path
+            //reading the name of the input file
             Console.Write("Please enter the filename: ");
             fileName = Console.ReadLine();
 
@@ -48,10 +48,10 @@ namespace testify
             if (!String.IsNullOrEmpty(folderName)) path = folderName + "\\out";
             else path = "out";
 
-            for (int i = 1; i <= testNumber; ++i)
+            for (short i = 1; i <= testNumber; ++i)
             {
                 //fill up the output list with random words
-                for (int j = 1; j <= wordNumber; ++j)
+                for (short j = 1; j <= wordNumber; ++j)
                 {
                     int n = random.Next(1, lineNumber + 1);
                     if (!used.Contains(n))
@@ -75,9 +75,9 @@ namespace testify
                 used.Clear();
                 outputList.Clear();
             }
+            dictList.Clear();
                         
             Console.WriteLine("{0} tests are generated succesfully. Press any key to continue.", testNumber);
-            dictList.Clear();
             Console.ReadKey();
         }
     }
