@@ -21,7 +21,7 @@ namespace testify
         }
 
         /// <summary>
-        /// Method <c>ToString</c> word getter method
+        /// Method <c>ToString</c> to string method
         /// </summary>
         /// <returns>
         /// A string representing a word and it's serial nubmer, in the form n: word,

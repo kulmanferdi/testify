@@ -147,9 +147,10 @@ namespace testify
         public void Run()
         {            
             Init();
+            Console.Clear();
             short selection;
             do
-            {
+            {     
                 Print();
                 do
                 {
