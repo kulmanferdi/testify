@@ -19,26 +19,28 @@ namespace testify
         {
             Console.WriteLine("_________________MENU_________________\n");
             Console.WriteLine("0. Exit");
-            Console.WriteLine("1. Generate tests");
-            Console.WriteLine("2. Check if a word is in the input file");
-            Console.WriteLine("3. Count a word in every output file");
+            Console.WriteLine("1. Generate tests (TXT)");
+            Console.WriteLine("2. Generate tests (XLSX)");
+            Console.WriteLine("3. Check if a word is in the input file");
+            Console.WriteLine("4. Count a word in every output file");
             Console.WriteLine("______________________________________");   
         }
 
         private void Init()
         {
             //reading the name of the input file 
+            string fileName;
             do
             {
                 Console.Write("Please enter the name of the input file: ");
-                inputPath.Append(Console.ReadLine());
-            } while (String.IsNullOrEmpty(Console.ReadLine().ToString()));
+                fileName= Console.ReadLine();
+            } while (String.IsNullOrEmpty(fileName));
+            inputPath.Append(fileName);
             inputPath.Append(".txt");
-            
 
             //reading the words, every word is added once
-            StreamReader sr = new StreamReader(inputPath.ToString());
-            File.ReadAllLines(inputPath.ToString(),Encoding.UTF8);
+            StreamReader sr = new StreamReader(@inputPath.ToString());
+            //File.ReadAllLines(inputPath.ToString(),Encoding.UTF8);
             while (!sr.EndOfStream)
             {                
                 if (!dictList.Any(Dictionary => Dictionary.GetWord() == sr.ReadLine()))
@@ -53,14 +55,12 @@ namespace testify
             {
                 Console.Write("Please enter the name of the destination folder: ");
                 outputPath.Append(Console.ReadLine());
-            } while (String.IsNullOrEmpty(outputPath.ToString()));
+            } while (String.IsNullOrEmpty(@outputPath.ToString()));
             outputPath.Append("\\out");
         }
 
         private void GenerateTests()
-        {           
-            int randomNumber;
-            
+        {    
             List<string> outputList = new List<string>();
 
             Random random = new Random();           
@@ -78,21 +78,24 @@ namespace testify
             {
                 //fill up the output list with random words
                 for (short j = 1; j <= wordNumber; ++j)
-                {
-                    randomNumber = random.Next(1, dictList.Count() + 1);
+                {                    
+                    int randomNumber = random.Next(0, dictList.Count);
                     if (!outputList.Contains(dictList[randomNumber].GetWord()))
                     {
                         outputList.Add(dictList[randomNumber].GetWord());
                     }
                 }
                 //create an output file
-                File.WriteAllLines(outputPath.ToString() + i.ToString() + ".txt", outputList,Encoding.UTF8);
+                File.WriteAllLines(@outputPath.ToString() + i.ToString() + ".txt", outputList, Encoding.UTF8);
                 outputList.Clear();
             }
             dictList.Clear();
 
-            Console.WriteLine("{0} tests are generated succesfully. Press any key to continue.", testNumber);            
+            Console.WriteLine("{0} tests are generated succesfully. Press any key to continue.", testNumber);
+            Console.ReadKey();
         }
+
+        private void GenerateTests(int xlsx) { Console.WriteLine("This feature is yet to work."); }
 
         private void CheckInInput()
         {
@@ -137,12 +140,13 @@ namespace testify
                 {
                     Console.Write("Select an option: ");
                     selection = Convert.ToInt16(Console.ReadLine());
-                } while (selection < 0 | selection > 3);
+                } while (selection < 0 | selection > 4);
                 switch (selection)
                 {
                     case 1: GenerateTests(); break;
-                    case 2: CheckInInput(); break;
-                    case 3: CountInOutputs(); break;
+                    case 2: GenerateTests(0); break;
+                    case 3: CheckInInput(); break;
+                    case 4: CountInOutputs(); break;
                 }
                 Console.Clear();
             } while (selection != 0);

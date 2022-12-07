@@ -4,11 +4,10 @@ namespace testify
 {
     internal class App
     {       
-        public void Main()
+        public static void Main()
         {
             Menu menu = new Menu();
             menu.Run();
-            Console.ReadKey();
         }
     }
 }
