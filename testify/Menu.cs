@@ -73,7 +73,6 @@ namespace testify
             //the number of words in the test
             Console.Write("Number of words: ");
             wordNumber = Convert.ToInt16(Console.ReadLine());
-            Console.WriteLine(dictList.Count);
             //generating the different outputs
             for (short i = 1; i <= testNumber; ++i)
             {
@@ -82,15 +81,13 @@ namespace testify
                 while (j <= wordNumber)
                 { 
                     int randomNumber = random.Next(0, dictList.Count);
-                    Console.WriteLine(randomNumber+ " " + dictList[randomNumber].GetWord());
                     if (!outputList.Contains(dictList[randomNumber].GetWord()))
                     {
                         outputList.Add(dictList[randomNumber].GetWord());
                         j++;
                     }
                     else continue;
-                }                
-                Console.WriteLine();
+                }
                 //create an output file
                 File.WriteAllLines(@outputPath.ToString() + i.ToString() + ".txt", outputList, Encoding.UTF8);
                 outputList.Clear();
