@@ -64,15 +64,20 @@ namespace testify
         {    
             List<string> outputList = new List<string>();
 
-            Random random = new Random();           
-
+            Random random = new Random();
             //the amount of tests, that needs to generated
-            Console.Write("Number of tests: ");
-            testNumber = Convert.ToInt16(Console.ReadLine());
+            do
+            {
+                Console.Write("Number of tests: ");
+                testNumber = Convert.ToInt16(Console.ReadLine());
+            } while (testNumber <= 0);
 
             //the number of words in the test
-            Console.Write("Number of words: ");
-            wordNumber = Convert.ToInt16(Console.ReadLine());
+            do { 
+                Console.Write("Number of words: ");
+                wordNumber = Convert.ToInt16(Console.ReadLine());
+            } while (wordNumber <= 0);
+
             //generating the different outputs
             for (short i = 1; i <= testNumber; ++i)
             {
@@ -86,7 +91,6 @@ namespace testify
                         outputList.Add(dictList[randomNumber].GetWord());
                         j++;
                     }
-                    else continue;
                 }
                 //create an output file
                 File.WriteAllLines(@outputPath.ToString() + i.ToString() + ".txt", outputList, Encoding.UTF8);
@@ -94,7 +98,7 @@ namespace testify
             }
             dictList.Clear();
 
-            Console.WriteLine("{0} tests are generated succesfully.\nPress any key to continue.", testNumber);
+            Console.WriteLine("{0} tests are generated succesfully.\nPress any key to continue...", testNumber);
             Console.ReadKey();
         }
 
@@ -109,7 +113,7 @@ namespace testify
                 Console.WriteLine("{0} is in the inputfile.", searchedWord);
             }
             else Console.WriteLine("{0} is not in the inputfile.", searchedWord);
-            Console.WriteLine(" Press any key to continue.");
+            Console.WriteLine("Press any key to continue...");
             Console.ReadKey();
         }        
 
@@ -120,15 +124,15 @@ namespace testify
             int count = 0;
             for (short i = 1; i <= testNumber; ++i)
             {
-                StreamReader sr = new StreamReader(outputPath.ToString() + i.ToString()+".txt");
+                StreamReader sr = new StreamReader(@outputPath.ToString() + i.ToString()+".txt");
                 while (!sr.EndOfStream)
                 {                     
-                    if(sr.ReadLine().Equals(searchedWord)) count++;
+                    if(sr.ReadLine().ToString().Equals(searchedWord)) count++;
                 }
                 sr.Close();
             }
             Console.WriteLine("{0} output file contains the \"{1}\" word.", count, searchedWord);
-            Console.WriteLine(" Press any key to continue.");
+            Console.WriteLine("Press any key to continue...");
             Console.ReadKey();
         }
 
