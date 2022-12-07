@@ -42,10 +42,11 @@ namespace testify
             StreamReader sr = new StreamReader(@inputPath.ToString());
             //File.ReadAllLines(inputPath.ToString(),Encoding.UTF8);
             while (!sr.EndOfStream)
-            {                
-                if (!dictList.Any(Dictionary => Dictionary.GetWord() == sr.ReadLine()))
+            {
+                string tempStr = sr.ReadLine();
+                if (!dictList.Any(Dictionary => Dictionary.GetWord().Equals(tempStr)))
                 {
-                    dictList.Add(new Dictionary(dictList.Count() + 1, sr.ReadLine()));
+                    dictList.Add(new Dictionary(dictList.Count() + 1, tempStr));
                 }
             }
             sr.Close();
