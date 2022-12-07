@@ -28,7 +28,11 @@ namespace testify
 
         private void Init()
         {
+            string input = "input";
+            string output = "output";
+
             //reading the name of the input file 
+            Directory.CreateDirectory(input);
             string fileName;
             do
             {
@@ -40,7 +44,6 @@ namespace testify
 
             //reading the words, every word is added once
             StreamReader sr = new StreamReader(@inputPath.ToString());
-            //File.ReadAllLines(inputPath.ToString(),Encoding.UTF8);
             while (!sr.EndOfStream)
             {
                 string tempStr = sr.ReadLine();
@@ -52,10 +55,14 @@ namespace testify
             sr.Close();
 
             //choosing the destination folder, then set the path            
+            Directory.CreateDirectory(output);
             do
             {
+                string folderName;
                 Console.Write("Please enter the name of the destination folder: ");
-                outputPath.Append(Console.ReadLine());
+                folderName = Path.Combine(output, Console.ReadLine());
+                Directory.CreateDirectory(folderName);
+                outputPath.Append(@folderName);
             } while (String.IsNullOrEmpty(@outputPath.ToString()));
             outputPath.Append("\\out");
         }
