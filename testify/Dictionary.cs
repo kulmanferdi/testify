@@ -7,8 +7,8 @@ namespace testify
     /// </summary>
     internal class Dictionary
     {
-        private int nthWord;
-        private string word;
+        public int nthWord { get; }
+        public string word { get; }
 
         /// <summary>
         /// This constructor initializes the new dictionary item with the values
@@ -18,36 +18,6 @@ namespace testify
         {
             nthWord = n;
             word = w;
-        }
-
-        /// <summary>
-        /// Constructor without parameters
-        /// </summary>
-        /// <exception cref="ArgumentException">
-        /// Thrown when the parameters are not given
-        /// </exception>
-        public Dictionary() { throw new ArgumentException("Invalid constructor"); }
-
-        /// <summary>
-        /// Method <c>GetnthWord</c> serail number getter method
-        /// </summary>
-        /// <returns>
-        /// This method return the serial number
-        /// </returns>
-        public int GetnthWord()
-        {
-            return nthWord;
-        }
-
-        /// <summary>
-        /// Method <c>GetWord</c> word getter method
-        /// </summary>
-        /// <returns>
-        /// This method return the word
-        /// </returns>
-        public string GetWord()
-        {
-            return word;
         }
 
         /// <summary>

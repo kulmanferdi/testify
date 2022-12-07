@@ -1,5 +1,6 @@
 ﻿using System;
 using System.IO;
+using System.Net.Mime;
 using System.Text;
 using static testify.Dictionary;
 
@@ -25,7 +26,7 @@ namespace testify
             Console.WriteLine("4. Count a word in every output file");
             Console.WriteLine("______________________________________");   
         }
-
+        
         private void Init()
         {
             string input = "input";
@@ -47,7 +48,7 @@ namespace testify
             while (!sr.EndOfStream)
             {
                 string tempStr = sr.ReadLine();
-                if (!dictList.Any(Dictionary => Dictionary.GetWord().Equals(tempStr)))
+                if (!dictList.Any(Dictionary => Dictionary.word.Equals(tempStr)))
                 {
                     dictList.Add(new Dictionary(dictList.Count() + 1, tempStr));
                 }
@@ -93,9 +94,9 @@ namespace testify
                 while (j <= wordNumber)
                 { 
                     int randomNumber = random.Next(0, dictList.Count);
-                    if (!outputList.Contains(dictList[randomNumber].GetWord()))
+                    if (!outputList.Contains(dictList[randomNumber].word))
                     {
-                        outputList.Add(dictList[randomNumber].GetWord());
+                        outputList.Add(dictList[randomNumber].word);
                         j++;
                     }
                 }
@@ -115,7 +116,7 @@ namespace testify
         {
             Console.Write("Enter the searched word: ");
             string searchedWord = Console.ReadLine();
-            if (dictList.Any(Dictionary => Dictionary.GetWord() == searchedWord))
+            if (dictList.Any(Dictionary => Dictionary.word == searchedWord))
             {
                 Console.WriteLine("{0} is in the inputfile.", searchedWord);
             }
