@@ -24,7 +24,7 @@ namespace testify
         /// Method <c>ToString</c> to string method
         /// </summary>
         /// <returns>
-        /// A string representing a word and it's serial nubmer, in the form n: word,
+        /// A string representing a word and it's serial nubmer, in the form of:  "n: word",
         /// to make it easily readable
         /// </returns>
         public override string ToString()

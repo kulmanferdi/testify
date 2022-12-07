@@ -6,7 +6,7 @@ namespace testify
     {       
         public static void Main()
         {
-            Menu menu = new Menu();
+            Menu menu = new();
             menu.Run();
         }
     }

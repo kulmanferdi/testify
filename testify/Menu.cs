@@ -47,10 +47,10 @@ namespace testify
             StreamReader sr = new StreamReader(@inputPath.ToString());
             while (!sr.EndOfStream)
             {
-                string tempStr = sr.ReadLine();
-                if (!dictList.Any(Dictionary => Dictionary.word.Equals(tempStr)))
+                string currentWord = sr.ReadLine();
+                if (!dictList.Any(Dictionary => Dictionary.word.Equals(currentWord)) && !String.IsNullOrEmpty(currentWord))
                 {
-                    dictList.Add(new Dictionary(dictList.Count() + 1, tempStr));
+                    dictList.Add(new Dictionary(dictList.Count + 1, currentWord));
                 }
             }
             sr.Close();
@@ -63,7 +63,7 @@ namespace testify
                 Console.Write("Please enter the name of the destination folder: ");
                 folderName = Path.Combine(output, Console.ReadLine());
                 Directory.CreateDirectory(folderName);
-                outputPath.Append(@folderName);
+                outputPath.Append(folderName);
             } while (String.IsNullOrEmpty(@outputPath.ToString()));
             outputPath.Append("\\out");
         }
@@ -139,7 +139,7 @@ namespace testify
                 }
                 sr.Close();
             }
-            Console.WriteLine("{0} output file contains the \"{1}\" word.", count, searchedWord);
+            Console.WriteLine("{0} output file(s) contains the \"{1}\" word.", count, searchedWord);
             Console.WriteLine("Press any key to continue...");
             Console.ReadKey();
         }
