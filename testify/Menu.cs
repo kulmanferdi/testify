@@ -116,7 +116,7 @@ namespace testify
         {
             Console.Write("Enter the searched word: ");
             string searchedWord = Console.ReadLine();
-            if (dictList.Any(Dictionary => Dictionary.word == searchedWord))
+            if (dictList.Any(Dictionary => Dictionary.word.Equals(searchedWord)))
             {
                 Console.WriteLine("{0} is in the inputfile.", searchedWord);
             }
