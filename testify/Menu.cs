@@ -15,9 +15,7 @@ namespace testify
 
         private static short testNumber;
         private static int wordNumber;
-        private int fileNameLength;
 
-        private bool inputRead = false;
         private bool outputsExist;
 
         private StringBuilder inputPath = new() ;
