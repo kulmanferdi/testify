@@ -10,8 +10,8 @@ namespace testify
     {
         public Menu() { }
 
-        private string input = "input";
-        private string output = "output";
+        private readonly string input = "input";
+        private readonly string output = "output";
 
         private static short testNumber;
         private static int wordNumber;
@@ -27,8 +27,8 @@ namespace testify
         {
             Console.WriteLine("___________________MENU___________________\n");
             Console.WriteLine("| 0. Exit                                 |");
-            Console.WriteLine("| 1. Generate tests (TXT)                 |");
-            Console.WriteLine("| 2. Generate tests (XLSX)                |");
+            Console.WriteLine("| 1. Generate tests -> TXT                |");
+            Console.WriteLine("| 2. Generate tests -> XLSX               |");
             Console.WriteLine("| 3. Check if a word is in the input file |");
             Console.WriteLine("| 4. Count a word in every output file    |");
             Console.WriteLine("| 5. Load other input file                |");
@@ -63,7 +63,6 @@ namespace testify
                 }
             }
             sr.Close();
-            inputRead = true;
         }
 
         private void GenerateTests()
@@ -77,13 +76,13 @@ namespace testify
                 folderName = Path.Combine(output, Console.ReadLine());
                 Directory.CreateDirectory(folderName);
                 outputPath.Append(folderName);
-            } while (String.IsNullOrEmpty(@outputPath.ToString()));
+            } while (String.IsNullOrEmpty(outputPath.ToString()));
             outputPath.Append("\\out");
 
             //list for the words
-            List<string> outputList = new List<string>();
+            List<string> outputList = new();
 
-            Random random = new Random();
+            Random random = new();
             //the amount of tests, that needs to generated
             do
             {
@@ -172,7 +171,7 @@ namespace testify
             Console.Clear();
             short selection;
             do
-            {     
+            {    
                 Print();
                 do
                 {
