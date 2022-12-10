@@ -8,29 +8,40 @@ namespace testify
 {
     internal class Menu
     {
+        public Menu() { }
+
+        private string input = "input";
+        private string output = "output";
+
         private static short testNumber;
         private static int wordNumber;
+        private int fileNameLength;
 
-        private StringBuilder inputPath = new StringBuilder("input\\");
+        private bool inputRead = false;
+        private bool outputsExist;
+
+        private StringBuilder inputPath = new() ;
         private StringBuilder outputPath = new();
 
         private List<Dictionary> dictList = new List<Dictionary>();
 
         private void Print() 
         {
-            Console.WriteLine("_________________MENU_________________\n");
-            Console.WriteLine("0. Exit");
-            Console.WriteLine("1. Generate tests (TXT)");
-            Console.WriteLine("2. Generate tests (XLSX)");
-            Console.WriteLine("3. Check if a word is in the input file");
-            Console.WriteLine("4. Count a word in every output file");
-            Console.WriteLine("______________________________________");   
+            Console.WriteLine("___________________MENU___________________\n");
+            Console.WriteLine("| 0. Exit                                 |");
+            Console.WriteLine("| 1. Generate tests (TXT)                 |");
+            Console.WriteLine("| 2. Generate tests (XLSX)                |");
+            Console.WriteLine("| 3. Check if a word is in the input file |");
+            Console.WriteLine("| 4. Count a word in every output file    |");
+            Console.WriteLine("| 5. Load other input file                |");
+            Console.WriteLine("__________________________________________");   
         }
         
-        private void Init()
-        {
-            string input = "input";
-            string output = "output";
+        private void LoadInput()
+        {     
+            inputPath.Clear();
+            inputPath.Append("input\\");
+            outputsExist = false;
 
             //reading the name of the input file 
             Directory.CreateDirectory(input);
@@ -54,7 +65,11 @@ namespace testify
                 }
             }
             sr.Close();
+            inputRead = true;
+        }
 
+        private void GenerateTests()
+        {
             //choosing the destination folder, then set the path            
             Directory.CreateDirectory(output);
             do
@@ -66,10 +81,8 @@ namespace testify
                 outputPath.Append(folderName);
             } while (String.IsNullOrEmpty(@outputPath.ToString()));
             outputPath.Append("\\out");
-        }
 
-        private void GenerateTests()
-        {    
+            //list for the words
             List<string> outputList = new List<string>();
 
             Random random = new Random();
@@ -105,8 +118,9 @@ namespace testify
                 outputList.Clear();
             }
             dictList.Clear();
-
-            Console.WriteLine("{0} tests are generated succesfully.\nPress any key to continue...", testNumber);
+            outputsExist = true;
+            Console.WriteLine("{0} tests are generated succesfully.", testNumber);
+            Console.Write("Press any key to continue...");
             Console.ReadKey();
         }
 
@@ -121,32 +135,42 @@ namespace testify
                 Console.WriteLine("{0} is in the inputfile.", searchedWord);
             }
             else Console.WriteLine("{0} is not in the inputfile.", searchedWord);
-            Console.WriteLine("Press any key to continue...");
+            Console.Write("Press any key to continue...");
             Console.ReadKey();
         }        
 
         private void CountInOutputs()
         {
-            Console.Write("Enter the searched word: ");
-            string searchedWord = Console.ReadLine();
-            int count = 0;
-            for (short i = 1; i <= testNumber; ++i)
+            if (outputsExist)
             {
-                StreamReader sr = new StreamReader(@outputPath.ToString() + i.ToString()+".txt");
-                while (!sr.EndOfStream)
-                {                     
-                    if(sr.ReadLine().ToString().Equals(searchedWord)) count++;
+                Console.Write("Enter the searched word: ");
+                string searchedWord = Console.ReadLine();
+                int count = 0;
+                for (short i = 1; i <= testNumber; ++i)
+                {
+                    StreamReader sr = new StreamReader(@outputPath.ToString() + i.ToString() + ".txt");
+                    while (!sr.EndOfStream)
+                    {
+                        if (sr.ReadLine().ToString().Equals(searchedWord)) count++;
+                    }
+                    sr.Close();
                 }
-                sr.Close();
+                Console.WriteLine("{0} output file(s) contains the \"{1}\" word.", count, searchedWord);
+                Console.Write("Press any key to continue...");
+                Console.ReadKey();
             }
-            Console.WriteLine("{0} output file(s) contains the \"{1}\" word.", count, searchedWord);
-            Console.WriteLine("Press any key to continue...");
-            Console.ReadKey();
+            else
+            {
+                Console.WriteLine("Output files aren't generated yet.");
+                Console.Write("Press any key to continue...");
+                Console.ReadKey();
+            }
         }
-
+        
         public void Run()
-        {            
-            Init();
+        {
+            Console.WriteLine("TESTIFY\n");
+            LoadInput();
             Console.Clear();
             short selection;
             do
@@ -156,13 +180,14 @@ namespace testify
                 {
                     Console.Write("Select an option: ");
                     selection = Convert.ToInt16(Console.ReadLine());
-                } while (selection < 0 | selection > 4);
+                } while (selection < 0 | selection > 5);
                 switch (selection)
                 {
                     case 1: GenerateTests(); break;
                     case 2: GenerateTests(0); break;
                     case 3: CheckInInput(); break;
                     case 4: CountInOutputs(); break;
+                    case 5: LoadInput(); break;
                 }
                 Console.Clear();
             } while (selection != 0);
