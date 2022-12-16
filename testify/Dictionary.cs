@@ -40,9 +40,19 @@ namespace testify
         /// </returns>
         public override bool Equals(Object obj)
         {
-            Dictionary d = obj as Dictionary;
-            if (d == null) return false;
+            if (obj is not Dictionary d) return false;
             else return base.Equals((Dictionary)obj) && word == d.word;
+        }
+
+        /// <summary>
+        /// Method <c>GetHashCode</c> generates the hashcode
+        /// </summary>
+        /// <returns>
+        /// Returns the hashcode of the item as an integer
+        /// </returns>
+        public override int GetHashCode()
+        {
+            return HashCode.Combine(nthWord, word);
         }
     }
 }
