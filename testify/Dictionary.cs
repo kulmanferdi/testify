@@ -7,8 +7,8 @@ namespace testify
     /// </summary>
     internal class Dictionary
     {
-        public int nthWord { get; }
-        public string word { get; }
+        public int wordID { get; }
+        public string word { get; set; }
 
         /// <summary>
         /// This constructor initializes the new dictionary item with the values
@@ -16,7 +16,7 @@ namespace testify
         /// </summary>
         public Dictionary(int n, string w)
         {
-            nthWord = n;
+            wordID = n;
             word = w;
         }
 
@@ -29,7 +29,7 @@ namespace testify
         /// </returns>
         public override string ToString()
         {
-            return nthWord.ToString() + ": " + word;
+            return wordID.ToString() + ": " + word;
         }
 
         /// <summary>
@@ -52,7 +52,7 @@ namespace testify
         /// </returns>
         public override int GetHashCode()
         {
-            return HashCode.Combine(nthWord, word);
+            return HashCode.Combine(wordID, word);
         }
     }
 }
