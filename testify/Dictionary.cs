@@ -7,14 +7,14 @@ namespace testify
     /// </summary>
     internal class Dictionary
     {
-        public int wordID { get; }
+        public uint wordID { get; }
         public string word { get; set; }
 
         /// <summary>
         /// This constructor initializes the new dictionary item with the values
         /// (<paramref name="n"/>,<paramref name="w"/>).
         /// </summary>
-        public Dictionary(int n, string w)
+        public Dictionary(uint n, string w)
         {
             wordID = n;
             word = w;

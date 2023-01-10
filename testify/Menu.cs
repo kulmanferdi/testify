@@ -9,8 +9,8 @@ namespace testify
         private const string input = "input";
         private const string output = "output";
 
-        private static short testNumber;
-        private static short wordNumber;
+        private static ushort testNumber;
+        private static ushort wordNumber;
 
         private bool outputsExist;
 
@@ -72,9 +72,7 @@ namespace testify
                 {
                     string currentWord = sr.ReadLine();
                     if (!dictList.Any(Dictionary => Dictionary.word.Equals(currentWord)) && !String.IsNullOrEmpty(currentWord))
-                    {
-                        dictList.Add(new Dictionary(dictList.Count + 1, currentWord));
-                    }
+                        dictList.Add(new Dictionary(Convert.ToUInt32(dictList.Count + 1), currentWord));
                 }
                 sr.Close();
             }
@@ -115,13 +113,13 @@ namespace testify
                 do
                 {
                     Console.Write("Number of tests: ");
-                    if (short.TryParse(Console.ReadLine().ToString(), out testNumber)) { }
+                    if (ushort.TryParse(Console.ReadLine().ToString(), out testNumber)) { }
                 } while (testNumber <= 0);
 
                 //the number of words in the test
                 do { 
                     Console.Write("Number of words: ");
-                    if (short.TryParse(Console.ReadLine().ToString(), out wordNumber)) { }
+                    if (ushort.TryParse(Console.ReadLine().ToString(), out wordNumber)) { }
                 } while (wordNumber <= 0);
             }
             catch (IOException e)
@@ -135,10 +133,10 @@ namespace testify
             //generating the different outputs
             List<string> outputList = new();
             Random random = new();
-            for (short i = 1; i <= testNumber; ++i)
+            for (ushort i = 1; i <= testNumber; ++i)
             {
                 //fill up the output list with random words
-                short j = 1;
+                ushort j = 1;
                 while (j <= wordNumber)
                 {
                     int randomNumber = random.Next(0, dictList.Count);
@@ -173,9 +171,7 @@ namespace testify
                 Console.Write("Enter the searched word: ");
                 string searchedWord = Console.ReadLine();
                 if (dictList.Any(Dictionary => Dictionary.word.Equals(searchedWord)))
-                {
                     Console.WriteLine("{0} is in the inputfile.", searchedWord);
-                }
                 else Console.WriteLine("{0} is not in the inputfile.", searchedWord);
                 Console.Write("Press any key to continue...");
                 Console.ReadKey();
@@ -196,14 +192,12 @@ namespace testify
                 {
                     Console.Write("Enter the searched word: ");
                     string searchedWord = Console.ReadLine();
-                    short count = 0;
-                    for (short i = 1; i <= testNumber; ++i)
+                    ushort count = 0;
+                    for (ushort i = 1; i <= testNumber; ++i)
                     {
                         StreamReader sr = new StreamReader(OutputPath.ToString() + i.ToString() + ".txt");
                         while (!sr.EndOfStream)
-                        {
                             if (sr.ReadLine().ToString().Equals(searchedWord)) count++;
-                        }
                         sr.Close();
                     }
                     Console.WriteLine("{0} output file(s) contains the \"{1}\" word.", count, searchedWord);
@@ -231,7 +225,7 @@ namespace testify
             Console.WriteLine("Testify\n");
             LoadInput();
             Console.Clear();
-            short selectedMenuIndex;
+            ushort selectedMenuIndex;
             do
             {
                 try
@@ -240,7 +234,7 @@ namespace testify
                     do
                     {
                         Console.Write("Select an option: ");
-                        selectedMenuIndex = Convert.ToInt16(Console.ReadLine());
+                        selectedMenuIndex = Convert.ToUInt16(Console.ReadLine());
                     } while (selectedMenuIndex < 0 | selectedMenuIndex > 5);
                 }
                 catch (IOException e)
