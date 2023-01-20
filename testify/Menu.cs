@@ -31,14 +31,18 @@ namespace testify
             Console.WriteLine("| 3. Check if a word is in the input file |");
             Console.WriteLine("| 4. Count a word in every output file    |");
             Console.WriteLine("| 5. Load other input file                |");
+            Console.WriteLine("| 6. Load more input                      |");
+            Console.WriteLine("| 7. Print all input                      |");
             Console.WriteLine(" _________________________________________");   
         }
-        
+        private void InitInputFile()
+        {            
+            dictList.Clear();
+            LoadInput();
+        }
         private void LoadInput()
         {
             outputsExist = false;
-
-            dictList.Clear();
             InputPath.Clear();
 
             InputPath.Append(input);
@@ -58,7 +62,7 @@ namespace testify
                 InputPath.Append(".txt");
             }
             catch (IOException e)
-            {                
+            {
                 if (e.Source != null)
                     Console.WriteLine("IOException source: {0}\nInvalid input.", e.Source);
                 throw;
@@ -82,6 +86,7 @@ namespace testify
                     Console.WriteLine("FileNotFoundException source: {0}", e.Source);
                 throw;
             }
+
         }
 
         private void GenerateTxt()
@@ -218,12 +223,22 @@ namespace testify
                     Console.WriteLine("IOException source: {0}\nInvalid input.", e.Source);
                 throw;
             }
+        }       
+
+        private void PrintInput()
+        {
+            foreach (var it in dictList)
+            {
+                Console.WriteLine("{0}:\t{1}", it.wordID, it.word);
+            }
+            Console.Write("Press any key to continue...");
+            Console.ReadKey();
         }
         
         public void Run()
         {
             Console.WriteLine("Testify\n");
-            LoadInput();
+            InitInputFile();
             Console.Clear();
             ushort selectedMenuIndex;
             do
@@ -235,7 +250,7 @@ namespace testify
                     {
                         Console.Write("Select an option: ");
                         selectedMenuIndex = Convert.ToUInt16(Console.ReadLine());
-                    } while (selectedMenuIndex < 0 | selectedMenuIndex > 5);
+                    } while (selectedMenuIndex < 0 | selectedMenuIndex > 7);
                 }
                 catch (IOException e)
                 {                    
@@ -249,7 +264,9 @@ namespace testify
                     case 2: GenerateXlsx(); break;
                     case 3: CheckInInput(); break;
                     case 4: CountInOutputs(); break;
-                    case 5: LoadInput(); break;
+                    case 5: InitInputFile(); break;
+                    case 6: LoadInput(); break;
+                    case 7: PrintInput(); break;
                 }
                 Console.Clear();
             } while (selectedMenuIndex != 0);
