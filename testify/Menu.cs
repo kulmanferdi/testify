@@ -59,7 +59,10 @@ namespace testify
                     fileName = Console.ReadLine();
                 } while (String.IsNullOrEmpty(fileName));
                 InputPath.Append(fileName);
-                InputPath.Append(".txt");
+                if (!InputPath.ToString().Contains(".txt"))
+                {
+                    InputPath.Append(".txt");
+                }                
             }
             catch (IOException e)
             {
@@ -125,7 +128,7 @@ namespace testify
                 do { 
                     Console.Write("Number of words: ");
                     if (ushort.TryParse(Console.ReadLine().ToString(), out wordNumber)) { }
-                } while (wordNumber <= 0);
+                } while (wordNumber <= 0 & wordNumber > dictList.Count);
             }
             catch (IOException e)
             {
