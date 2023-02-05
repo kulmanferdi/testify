@@ -13,28 +13,17 @@ namespace testify
         private static ushort wordNumber;
 
         private bool outputsExist;
+        private bool inputMissing;
 
         private StringBuilder inputPath = new();
         private StringBuilder outputPath = new();
 
         private readonly List<Dictionary> dictList = new();
+        private readonly List<Dictionary> menuList = new();
 
         public StringBuilder InputPath { get => inputPath; set => inputPath = value; }
         public StringBuilder OutputPath { get => outputPath; set => outputPath = value; }
-
-        private void Print() 
-        {
-            Console.WriteLine(" __________________MENU___________________\n");
-            Console.WriteLine("| 0. Exit                                 |");
-            Console.WriteLine("| 1. Generate tests -> TXT                |");
-            Console.WriteLine("| 2. Generate tests -> XLSX               |");
-            Console.WriteLine("| 3. Check if a word is in the input file |");
-            Console.WriteLine("| 4. Count a word in every output file    |");
-            Console.WriteLine("| 5. Load other input file                |");
-            Console.WriteLine("| 6. Load more input                      |");
-            Console.WriteLine("| 7. Print all input                      |");
-            Console.WriteLine(" _________________________________________");   
-        }
+       
         private void InitInputFile()
         {            
             dictList.Clear();
@@ -90,6 +79,7 @@ namespace testify
                 throw;
             }
 
+            if (dictList.Count == 0) inputMissing = true;
         }
 
         private void GenerateTxt()
@@ -104,9 +94,11 @@ namespace testify
                     string folderName;
                     Console.Write("Please enter the name of the destination folder: ");
                     folderName = Path.Combine(output, Console.ReadLine());
+                    if (breakFunction(folderName)) return;
                     Directory.CreateDirectory(folderName);
                     OutputPath.Append(folderName);
                 } while (String.IsNullOrEmpty(OutputPath.ToString()));
+
                 OutputPath.Append("\\out");
             }
             catch (IOException e)
@@ -178,6 +170,7 @@ namespace testify
             {
                 Console.Write("Enter the searched word: ");
                 string searchedWord = Console.ReadLine();
+                if (breakFunction(searchedWord)) return;
                 if (dictList.Any(Dictionary => Dictionary.word.Equals(searchedWord)))
                     Console.WriteLine("{0} is in the inputfile.", searchedWord);
                 else Console.WriteLine("{0} is not in the inputfile.", searchedWord);
@@ -200,6 +193,7 @@ namespace testify
                 {
                     Console.Write("Enter the searched word: ");
                     string searchedWord = Console.ReadLine();
+                    if (breakFunction(searchedWord)) return;
                     ushort count = 0;
                     for (ushort i = 1; i <= testNumber; ++i)
                     {
@@ -237,13 +231,49 @@ namespace testify
             Console.Write("Press any key to continue...");
             Console.ReadKey();
         }
-        
+
+        private void Print()
+        {
+            Console.WriteLine(" __________________MENU___________________\n");
+            Console.WriteLine("| 0. Exit                                 |");
+            Console.WriteLine("| 1. Generate tests -> TXT                |");
+            Console.WriteLine("| 2. Generate tests -> XLSX               |");
+            Console.WriteLine("| 3. Check if a word is in the input file |");
+            Console.WriteLine("| 4. Count a word in every output file    |");
+            Console.WriteLine("| 5. Load other input file                |");
+            Console.WriteLine("| 6. Load more input                      |");
+            Console.WriteLine("| 7. Print all input                      |");
+            Console.WriteLine(" _________________________________________");
+        }
+
+        private void InitApp()
+        {
+            //vars
+            menuList.Add(new Dictionary(1, "Generate tests -> TXT"));
+            menuList.Add(new Dictionary(2, "Generate tests -> XLSX"));
+            menuList.Add(new Dictionary(3, "Check if a word is in the input file"));
+            menuList.Add(new Dictionary(4, "Count a word in every output file"));
+            menuList.Add(new Dictionary(5, "Load other input file"));
+            menuList.Add(new Dictionary(6, "Load more input"));
+            menuList.Add(new Dictionary(7, "Print all input"));
+
+            inputMissing = false;
+
+            //run
+            Console.WriteLine("Testify\n");
+            do { InitInputFile(); } while (inputMissing);            
+            Console.Clear();
+        }
+
+        private bool breakFunction(string str)
+        {
+            if (str.Equals("*esc")) return true; return false;
+        }
+
         public void Run()
         {
-            Console.WriteLine("Testify\n");
-            InitInputFile();
-            Console.Clear();
-            ushort selectedMenuIndex;
+            InitApp();
+            ushort selectedMenuIndex;           
             do
             {
                 try
@@ -260,16 +290,16 @@ namespace testify
                     if (e.Source != null)
                         Console.WriteLine("IOException source: {0}\nInvalid input.", e.Source);
                     throw;
-                }
+                }                
                 switch (selectedMenuIndex)
                 {
-                    case 1: GenerateTxt(); break;
-                    case 2: GenerateXlsx(); break;
-                    case 3: CheckInInput(); break;
-                    case 4: CountInOutputs(); break;
-                    case 5: InitInputFile(); break;
-                    case 6: LoadInput(); break;
-                    case 7: PrintInput(); break;
+                    case 1: Console.Clear(); Console.WriteLine(menuList[selectedMenuIndex - 1].word); GenerateTxt(); break;
+                    case 2: Console.Clear(); Console.WriteLine(menuList[selectedMenuIndex - 1].word); GenerateXlsx(); break;
+                    case 3: Console.Clear(); Console.WriteLine(menuList[selectedMenuIndex - 1].word); CheckInInput(); break;
+                    case 4: Console.Clear(); Console.WriteLine(menuList[selectedMenuIndex - 1].word); CountInOutputs(); break;
+                    case 5: Console.Clear(); Console.WriteLine(menuList[selectedMenuIndex - 1].word); InitInputFile(); break;
+                    case 6: Console.Clear(); Console.WriteLine(menuList[selectedMenuIndex - 1].word); LoadInput(); break;
+                    case 7: Console.Clear(); Console.WriteLine(menuList[selectedMenuIndex - 1].word); PrintInput(); break;
                 }
                 Console.Clear();
             } while (selectedMenuIndex != 0);
