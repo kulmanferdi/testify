@@ -79,7 +79,10 @@ namespace testify
                 throw;
             }
 
-            if (dictList.Count == 0) inputMissing = true;
+            if (dictList.Count == 0)
+                inputMissing = true;
+            else
+                inputMissing = false;
         }
 
         private void GenerateTxt()
@@ -170,7 +173,8 @@ namespace testify
             {
                 Console.Write("Enter the searched word: ");
                 string searchedWord = Console.ReadLine();
-                if (breakFunction(searchedWord)) return;
+                if (breakFunction(searchedWord))
+                    return;
                 if (dictList.Any(Dictionary => Dictionary.word.Equals(searchedWord)))
                     Console.WriteLine("{0} is in the inputfile.", searchedWord);
                 else Console.WriteLine("{0} is not in the inputfile.", searchedWord);
@@ -193,13 +197,15 @@ namespace testify
                 {
                     Console.Write("Enter the searched word: ");
                     string searchedWord = Console.ReadLine();
-                    if (breakFunction(searchedWord)) return;
+                    if (breakFunction(searchedWord))
+                        return;
                     ushort count = 0;
                     for (ushort i = 1; i <= testNumber; ++i)
                     {
                         StreamReader sr = new StreamReader(OutputPath.ToString() + i.ToString() + ".txt");
                         while (!sr.EndOfStream)
-                            if (sr.ReadLine().ToString().Equals(searchedWord)) count++;
+                            if (sr.ReadLine().ToString().Equals(searchedWord))
+                                count++;
                         sr.Close();
                     }
                     Console.WriteLine("{0} output file(s) contains the \"{1}\" word.", count, searchedWord);
@@ -261,13 +267,16 @@ namespace testify
 
             //run
             Console.WriteLine("Testify\n");
-            do { InitInputFile(); } while (inputMissing);            
+            do { InitInputFile(); }
+            while (inputMissing);
             Console.Clear();
         }
 
         private bool breakFunction(string str)
         {
-            if (str.Equals("*esc")) return true; return false;
+            if (str.Equals("*esc"))
+                return true;
+            return false;
         }
 
         public void Run()
