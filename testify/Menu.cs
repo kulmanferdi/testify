@@ -232,21 +232,16 @@ namespace testify
 
         private void Print()
         {
-            Console.WriteLine(" __________________MENU___________________\n");
-            Console.WriteLine("| 0. Exit                                 |");
-            Console.WriteLine("| 1. Generate tests -> TXT                |");
-            Console.WriteLine("| 2. Generate tests -> XLSX               |");
-            Console.WriteLine("| 3. Check if a word is in the input file |");
-            Console.WriteLine("| 4. Count a word in every output file    |");
-            Console.WriteLine("| 5. Load other input file                |");
-            Console.WriteLine("| 6. Load more input                      |");
-            Console.WriteLine("| 7. Print all input                      |");
-            Console.WriteLine(" _________________________________________");
+            Console.WriteLine(" __________________MENU____________________\n");
+            foreach (var i in Enumerable.Range(0, _menuList.Count))
+                Console.WriteLine("| {0}", _menuList[i]);
+            Console.WriteLine(" __________________________________________");
         }
 
         private void InitApp()
         {
             //vars
+            _menuList.Add(new Dictionary(0, "Exit"));
             _menuList.Add(new Dictionary(1, "Generate tests -> TXT"));
             _menuList.Add(new Dictionary(2, "Generate tests -> XLSX"));
             _menuList.Add(new Dictionary(3, "Check if a word is in the input file"));
