@@ -13,15 +13,12 @@ namespace testify
         private bool _outputsExist;
         private bool _inputMissing;
 
-        private StringBuilder _inputPath = new();
-        private StringBuilder _outputPath = new();
-
         private readonly List<Dictionary> _dictList = new();
         private readonly List<Dictionary> _menuList = new();
 
-        private StringBuilder InputPath { get => _inputPath; }
-        private StringBuilder OutputPath { get => _outputPath; }
-       
+        private StringBuilder InputPath { get; } = new();
+        private StringBuilder OutputPath { get; } = new();
+
         private void InitInputFile()
         {            
             _dictList.Clear();
@@ -77,10 +74,7 @@ namespace testify
                 throw;
             }
 
-            if (_dictList.Count == 0)
-                _inputMissing = true;
-            else
-                _inputMissing = false;
+            _inputMissing = _dictList.Count == 0;
         }
 
         private void GenerateTxt()
@@ -92,9 +86,8 @@ namespace testify
                 Directory.CreateDirectory(Output);
                 do
                 {
-                    string folderName;
                     Console.Write("Please enter the name of the destination folder: ");
-                    folderName = Path.Combine(Output, Console.ReadLine()!);
+                    var folderName = Path.Combine(Output, Console.ReadLine()!);
                     if (BreakFunction(folderName)) return;
                     Directory.CreateDirectory(folderName);
                     OutputPath.Append(folderName);
@@ -153,7 +146,7 @@ namespace testify
             }
             _outputsExist = true;
 
-            Console.WriteLine("{0} tests are generated succesfully.", _testNumber);
+            Console.WriteLine("{0} tests are generated successfully.", _testNumber);
             Console.Write("Press any key to continue...");
             Console.ReadKey();
         }
@@ -173,9 +166,10 @@ namespace testify
                 string searchedWord = Console.ReadLine()!;
                 if (BreakFunction(searchedWord))
                     return;
-                if (_dictList.Any(dictionary => dictionary.word.Equals(searchedWord)))
-                    Console.WriteLine("{0} is in the inputfile.", searchedWord);
-                else Console.WriteLine("{0} is not in the inputfile.", searchedWord);
+                Console.WriteLine(
+                    _dictList.Any(dictionary => dictionary.word.Equals(searchedWord))
+                        ? "{0} is in the input file."
+                        : "{0} is not in the input file.", searchedWord);
                 Console.Write("Press any key to continue...");
                 Console.ReadKey();
             }
