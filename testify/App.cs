@@ -1,8 +1,6 @@
-﻿using static testify.Menu;
-
-namespace testify
+﻿namespace testify
 {
-    internal class App
+    internal abstract class App
     {       
         public static void Main()
         {

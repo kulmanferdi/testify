@@ -1,14 +1,12 @@
-﻿using System.Drawing;
-
-namespace testify
+﻿namespace testify
 {
     /// <summary>
     /// Class <c>Dictionary</c> contains a word and its serial number
     /// </summary>
     internal class Dictionary
     {
-        public uint wordID { get; }
-        public string word { get; set; }
+        public uint WordId { get; }
+        public string Word { get; }
 
         /// <summary>
         /// This constructor initializes the new dictionary item with the values
@@ -16,20 +14,20 @@ namespace testify
         /// </summary>
         public Dictionary(uint n, string w)
         {
-            wordID = n;
-            word = w;
+            WordId = n;
+            Word = w;
         }
 
         /// <summary>
         /// Method <c>ToString</c> to string method
         /// </summary>
         /// <returns>
-        /// A string representing a word and it's serial nubmer, in the form of:  "n: word",
+        /// A string representing a word and it's serial number, in the form of:  "n: word",
         /// to make it easily readable
         /// </returns>
         public override string ToString()
         {
-            return wordID.ToString() + ": " + word;
+            return WordId.ToString() + ": " + Word;
         }
 
         /// <summary>
@@ -38,10 +36,10 @@ namespace testify
         /// <returns>
         /// Returns true if the words are the same, the serial number doesn't matter
         /// </returns>
-        public override bool Equals(Object obj)
+        public override bool Equals(object? obj)
         {
             if (obj is not Dictionary d) return false;
-            else return base.Equals((Dictionary)obj) && word == d.word;
+            return obj.Equals(d) && Word == d.Word;
         }
 
         /// <summary>
@@ -52,7 +50,7 @@ namespace testify
         /// </returns>
         public override int GetHashCode()
         {
-            return HashCode.Combine(wordID, word);
+            return HashCode.Combine(WordId, Word);
         }
     }
 }

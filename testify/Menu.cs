@@ -30,7 +30,7 @@ namespace testify
             InputPath.Clear();
 
             InputPath.Append(Input);
-            InputPath.Append("\\");
+            InputPath.Append('\\');
 
             //reading the name of the input file
             try
@@ -41,7 +41,7 @@ namespace testify
                 {
                     Console.Write("Please enter the name of the input file: ");
                     fileName = Console.ReadLine()!;
-                } while (String.IsNullOrEmpty(fileName));
+                } while (string.IsNullOrEmpty(fileName));
                 InputPath.Append(fileName);
                 if (!InputPath.ToString().Contains(".txt"))
                 {
@@ -58,11 +58,11 @@ namespace testify
             //reading the words, every word is added once
             try
             {
-                StreamReader sr = new StreamReader(InputPath.ToString());
+                var sr = new StreamReader(InputPath.ToString());
                 while (!sr.EndOfStream)
                 {
-                    string currentWord = sr.ReadLine()!;
-                    if (!_dictList.Any(dictionary => dictionary.word.Equals(currentWord)) && !String.IsNullOrEmpty(currentWord))
+                    var currentWord = sr.ReadLine()!;
+                    if (!_dictList.Any(dictionary => dictionary.Word.Equals(currentWord)) && !string.IsNullOrEmpty(currentWord))
                         _dictList.Add(new Dictionary(Convert.ToUInt32(_dictList.Count + 1), currentWord));
                 }
                 sr.Close();
@@ -91,7 +91,7 @@ namespace testify
                     if (BreakFunction(folderName)) return;
                     Directory.CreateDirectory(folderName);
                     OutputPath.Append(folderName);
-                } while (String.IsNullOrEmpty(OutputPath.ToString()));
+                } while (string.IsNullOrEmpty(OutputPath.ToString()));
 
                 OutputPath.Append("\\out");
             }
@@ -133,12 +133,10 @@ namespace testify
                 ushort j = 1;
                 while (j <= _wordNumber)
                 {
-                    int randomNumber = random.Next(0, _dictList.Count);
-                    if (!outputList.Contains(_dictList[randomNumber].word))
-                    {
-                        outputList.Add(_dictList[randomNumber].word);
-                        j++;
-                    }
+                    var randomNumber = random.Next(0, _dictList.Count);
+                    if (outputList.Contains(_dictList[randomNumber].Word)) continue;
+                    outputList.Add(_dictList[randomNumber].Word);
+                    j++;
                 }
                 //create an output file
                 File.WriteAllLines(OutputPath + i.ToString() + ".txt", outputList, Encoding.UTF8);
@@ -150,24 +148,17 @@ namespace testify
             Console.Write("Press any key to continue...");
             Console.ReadKey();
         }
-
-        private void GenerateXlsx()
-        {
-            Console.WriteLine("This feature is yet to work.");
-            Console.Write("Press any key to continue...");
-            Console.ReadKey();
-        }
-
+        
         private void CheckInInput()
         {
             try
             {
                 Console.Write("Enter the searched word: ");
-                string searchedWord = Console.ReadLine()!;
+                var searchedWord = Console.ReadLine()!;
                 if (BreakFunction(searchedWord))
                     return;
                 Console.WriteLine(
-                    _dictList.Any(dictionary => dictionary.word.Equals(searchedWord))
+                    _dictList.Any(dictionary => dictionary.Word.Equals(searchedWord))
                         ? "{0} is in the input file."
                         : "{0} is not in the input file.", searchedWord);
                 Console.Write("Press any key to continue...");
@@ -188,13 +179,13 @@ namespace testify
                 if (_outputsExist)
                 {
                     Console.Write("Enter the searched word: ");
-                    string searchedWord = Console.ReadLine()!;
+                    var searchedWord = Console.ReadLine()!;
                     if (BreakFunction(searchedWord))
                         return;
                     ushort count = 0;
                     for (ushort i = 1; i <= _testNumber; ++i)
                     {
-                        StreamReader sr = new StreamReader(OutputPath + i.ToString() + ".txt");
+                        var sr = new StreamReader(OutputPath + i.ToString() + ".txt");
                         while (!sr.EndOfStream)
                             if (sr.ReadLine()!.Equals(searchedWord))
                                 count++;
@@ -224,7 +215,7 @@ namespace testify
         {
             foreach (var it in _dictList)
             {
-                Console.WriteLine("{0}:\t{1}", it.wordID, it.word);
+                Console.WriteLine("{0}:\t{1}", it.WordId, it.Word);
             }
             Console.Write("Press any key to continue...");
             Console.ReadKey();
@@ -241,16 +232,23 @@ namespace testify
         private void InitApp()
         {
             //vars
-            _menuList.Add(new Dictionary(0, "Exit"));
-            _menuList.Add(new Dictionary(1, "Generate tests -> TXT"));
-            _menuList.Add(new Dictionary(2, "Generate tests -> XLSX"));
-            _menuList.Add(new Dictionary(3, "Check if a word is in the input file"));
-            _menuList.Add(new Dictionary(4, "Count a word in every output file"));
-            _menuList.Add(new Dictionary(5, "Load other input file"));
-            _menuList.Add(new Dictionary(6, "Load more input"));
-            _menuList.Add(new Dictionary(7, "Print all input"));
-
             _inputMissing = false;
+            
+            string [] menuItems = {
+                "Exit",
+                "Generate tests -> TXT",
+                "Check if a word is in the input file",
+                "Count a word in every output file",
+                "Load other input file",
+                "Load more input",
+                "Load more input",
+                "Print all input"
+            };
+            
+            foreach (uint i in Enumerable.Range(0, 6))
+            {
+                _menuList.Add(new Dictionary(i, menuItems[i]));
+            }
 
             //run
             Console.WriteLine("Testify\n");
@@ -259,11 +257,9 @@ namespace testify
             Console.Clear();
         }
 
-        private bool BreakFunction(string str)
+        private static bool BreakFunction(string str)
         {
-            if (str.Equals("*esc"))
-                return true;
-            return false;
+            return str.Equals("*esc");
         }
 
         public void Run()
@@ -289,13 +285,12 @@ namespace testify
                 }                
                 switch (selectedMenuIndex)
                 {
-                    case 1: Console.Clear(); Console.WriteLine(_menuList[selectedMenuIndex - 1].word); GenerateTxt(); break;
-                    case 2: Console.Clear(); Console.WriteLine(_menuList[selectedMenuIndex - 1].word); GenerateXlsx(); break;
-                    case 3: Console.Clear(); Console.WriteLine(_menuList[selectedMenuIndex - 1].word); CheckInInput(); break;
-                    case 4: Console.Clear(); Console.WriteLine(_menuList[selectedMenuIndex - 1].word); CountInOutputs(); break;
-                    case 5: Console.Clear(); Console.WriteLine(_menuList[selectedMenuIndex - 1].word); InitInputFile(); break;
-                    case 6: Console.Clear(); Console.WriteLine(_menuList[selectedMenuIndex - 1].word); LoadInput(); break;
-                    case 7: Console.Clear(); Console.WriteLine(_menuList[selectedMenuIndex - 1].word); PrintInput(); break;
+                    case 1: Console.Clear(); Console.WriteLine(_menuList[selectedMenuIndex - 1].Word); GenerateTxt(); break;
+                    case 2: Console.Clear(); Console.WriteLine(_menuList[selectedMenuIndex - 1].Word); CheckInInput(); break;
+                    case 3: Console.Clear(); Console.WriteLine(_menuList[selectedMenuIndex - 1].Word); CountInOutputs(); break;
+                    case 4: Console.Clear(); Console.WriteLine(_menuList[selectedMenuIndex - 1].Word); InitInputFile(); break;
+                    case 5: Console.Clear(); Console.WriteLine(_menuList[selectedMenuIndex - 1].Word); LoadInput(); break;
+                    case 6: Console.Clear(); Console.WriteLine(_menuList[selectedMenuIndex - 1].Word); PrintInput(); break;
                 }
                 Console.Clear();
             } while (selectedMenuIndex != 0);
