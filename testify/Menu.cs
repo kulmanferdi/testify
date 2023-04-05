@@ -16,6 +16,8 @@ namespace testify
         private readonly List<Dictionary> _dictList = new();
         private readonly List<Dictionary> _menuList = new();
 
+        private List<string> openedInputs = new();
+
         private StringBuilder InputPath { get; } = new();
         private StringBuilder OutputPath { get; } = new();
 
@@ -41,7 +43,8 @@ namespace testify
                 {
                     Console.Write("Please enter the name of the input file: ");
                     fileName = Console.ReadLine()!;
-                } while (string.IsNullOrEmpty(fileName));
+                } while (string.IsNullOrEmpty(fileName) | openedInputs.Contains(fileName));
+                openedInputs.Add(fileName);
                 InputPath.Append(fileName);
                 if (!InputPath.ToString().Contains(".txt"))
                 {
@@ -223,7 +226,7 @@ namespace testify
 
         private void Print()
         {
-            Console.WriteLine(" __________________MENU____________________\n");
+            Console.WriteLine(" __________________MENU____________________");
             foreach (var i in Enumerable.Range(0, _menuList.Count))
                 Console.WriteLine("| {0}", _menuList[i]);
             Console.WriteLine(" __________________________________________");
@@ -241,11 +244,10 @@ namespace testify
                 "Count a word in every output file",
                 "Load other input file",
                 "Load more input",
-                "Load more input",
                 "Print all input"
             };
             
-            foreach (uint i in Enumerable.Range(0, 6))
+            foreach (uint i in Enumerable.Range(0, menuItems.Length))
             {
                 _menuList.Add(new Dictionary(i, menuItems[i]));
             }
