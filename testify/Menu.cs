@@ -16,7 +16,7 @@ namespace testify
         private readonly List<Dictionary> _dictList = new();
         private readonly List<Dictionary> _menuList = new();
 
-        private List<string> openedInputs = new();
+        private readonly List<string> _openedInputs = new();
 
         private StringBuilder InputPath { get; } = new();
         private StringBuilder OutputPath { get; } = new();
@@ -43,8 +43,8 @@ namespace testify
                 {
                     Console.Write("Please enter the name of the input file: ");
                     fileName = Console.ReadLine()!;
-                } while (string.IsNullOrEmpty(fileName) | openedInputs.Contains(fileName));
-                openedInputs.Add(fileName);
+                } while (string.IsNullOrEmpty(fileName) | _openedInputs.Contains(fileName));
+                _openedInputs.Add(fileName);
                 InputPath.Append(fileName);
                 if (!InputPath.ToString().Contains(".txt"))
                 {
@@ -216,6 +216,12 @@ namespace testify
 
         private void PrintInput()
         {
+            Console.Write("Opened input files: ");
+            foreach (var str in _openedInputs)
+            {
+                Console.Write("{0} ", str);
+            }
+            Console.WriteLine();
             foreach (var it in _dictList)
             {
                 Console.WriteLine("{0}:\t{1}", it.WordId, it.Word);
@@ -287,12 +293,18 @@ namespace testify
                 }                
                 switch (selectedMenuIndex)
                 {
-                    case 1: Console.Clear(); Console.WriteLine(_menuList[selectedMenuIndex - 1].Word); GenerateTxt(); break;
-                    case 2: Console.Clear(); Console.WriteLine(_menuList[selectedMenuIndex - 1].Word); CheckInInput(); break;
-                    case 3: Console.Clear(); Console.WriteLine(_menuList[selectedMenuIndex - 1].Word); CountInOutputs(); break;
-                    case 4: Console.Clear(); Console.WriteLine(_menuList[selectedMenuIndex - 1].Word); InitInputFile(); break;
-                    case 5: Console.Clear(); Console.WriteLine(_menuList[selectedMenuIndex - 1].Word); LoadInput(); break;
-                    case 6: Console.Clear(); Console.WriteLine(_menuList[selectedMenuIndex - 1].Word); PrintInput(); break;
+                    case 1: Console.Clear(); Console.WriteLine(_menuList[selectedMenuIndex - 1].Word); 
+                        GenerateTxt(); break;
+                    case 2: Console.Clear(); Console.WriteLine(_menuList[selectedMenuIndex - 1].Word); 
+                        CheckInInput(); break;
+                    case 3: Console.Clear(); Console.WriteLine(_menuList[selectedMenuIndex - 1].Word); 
+                        CountInOutputs(); break;
+                    case 4: Console.Clear(); Console.WriteLine(_menuList[selectedMenuIndex - 1].Word); 
+                        _openedInputs.Clear(); InitInputFile(); break;
+                    case 5: Console.Clear(); Console.WriteLine(_menuList[selectedMenuIndex - 1].Word); 
+                        LoadInput(); break;
+                    case 6: Console.Clear(); Console.WriteLine(_menuList[selectedMenuIndex - 1].Word); 
+                        PrintInput(); break;
                 }
                 Console.Clear();
             } while (selectedMenuIndex != 0);
