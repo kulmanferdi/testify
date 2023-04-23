@@ -1,4 +1,4 @@
-﻿namespace testify
+﻿namespace testify.source
 {
     internal abstract class App
     {       

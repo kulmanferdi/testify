@@ -1,6 +1,6 @@
 ﻿using System.Text;
 
-namespace testify
+namespace testify.source
 {
     internal class Menu
     {

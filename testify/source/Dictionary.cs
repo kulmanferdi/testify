@@ -1,9 +1,9 @@
-﻿namespace testify
+﻿namespace testify.source
 {
     /// <summary>
     /// Class <c>Dictionary</c> contains a word and its serial number
     /// </summary>
-    internal class Dictionary
+    public class Dictionary
     {
         public uint WordId { get; }
         public string Word { get; }
