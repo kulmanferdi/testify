@@ -1,22 +1,26 @@
 ﻿using System.Text;
+using testify.pdf_templates;
 
 namespace testify.source
 {
     internal class Menu
     {
+        private uint _pdfNum ;
+        
         private const string Input = "input";
         private const string Output = "output";
 
+        private readonly List<string> _menuItems = null!;
+        private readonly List<string> _testTypes = null!;
+        private readonly List<string> _openedInputs = new();
+        
         private static ushort _testNumber;
         private static ushort _wordNumber;
 
         private bool _outputsExist;
         private bool _inputMissing;
-
+        
         private readonly List<Dictionary> _dictList = new();
-        private readonly List<Dictionary> _menuList = new();
-
-        private readonly List<string> _openedInputs = new();
 
         private StringBuilder InputPath { get; } = new();
         private StringBuilder OutputPath { get; } = new();
@@ -148,6 +152,16 @@ namespace testify.source
             _outputsExist = true;
 
             Console.WriteLine("{0} tests are generated successfully.", _testNumber);
+            Console.WriteLine("PDF Types");
+            int counter = 1;
+            foreach (var it in _testTypes)
+            {
+                Console.WriteLine("{0}. {1}", counter, it);
+                counter++;
+            }
+            Console.Write("Select the test type:");
+            _pdfNum = Convert.ToUInt32(Console.ReadLine());
+            SelectTestType(_pdfNum);
             Console.Write("Press any key to continue...");
             Console.ReadKey();
         }
@@ -233,32 +247,30 @@ namespace testify.source
         private void Print()
         {
             Console.WriteLine(" __________________MENU____________________");
-            foreach (var i in Enumerable.Range(0, _menuList.Count))
-                Console.WriteLine("| {0}", _menuList[i]);
+            foreach (var i in Enumerable.Range(0, _menuItems.Count))
+                Console.WriteLine("| {0}", _menuItems[i]);
             Console.WriteLine(" __________________________________________");
         }
 
         private void InitApp()
         {
-            //vars
+            //initializing lists and variables
             _inputMissing = false;
             
-            string [] menuItems = {
-                "Exit",
-                "Generate tests -> TXT",
-                "Check if a word is in the input file",
-                "Count a word in every output file",
-                "Load other input file",
-                "Load more input",
-                "Print all input"
-            };
+            _menuItems.Add("Exit");
+            _menuItems.Add("Generate tests");
+            _menuItems.Add( "Check if a word is in the input file");
+            _menuItems.Add("Count a word in every output file");
+            _menuItems.Add("Load other input file");
+            _menuItems.Add("Load more input");
+            _menuItems.Add( "Print all input");
+            _menuItems.Add("Generating PDF...");
             
-            foreach (uint i in Enumerable.Range(0, menuItems.Length))
-            {
-                _menuList.Add(new Dictionary(i, menuItems[i]));
-            }
+            _testTypes.Add("Verb forms test");
+            _testTypes.Add("Translation test");
+            
 
-            //run
+            //run the program and read the name of the input file
             Console.WriteLine("Testify\n");
             do { InitInputFile(); }
             while (_inputMissing);
@@ -268,6 +280,17 @@ namespace testify.source
         private static bool BreakFunction(string str)
         {
             return str.Equals("*esc");
+        }
+
+        private void SelectTestType(uint index)
+        {
+            VerbForms v = new();
+            Translate t = new();
+            switch (index)
+            {
+                case 0: v.GenerateDoc(_dictList); break;
+                case 1: t.GenerateDoc(_dictList); break;
+            }
         }
 
         public void Run()
@@ -293,18 +316,20 @@ namespace testify.source
                 }                
                 switch (selectedMenuIndex)
                 {
-                    case 1: Console.Clear(); Console.WriteLine(_menuList[selectedMenuIndex - 1].Word); 
+                    case 1: Console.Clear(); Console.WriteLine(_menuItems[selectedMenuIndex - 1]); 
                         GenerateTxt(); break;
-                    case 2: Console.Clear(); Console.WriteLine(_menuList[selectedMenuIndex - 1].Word); 
+                    case 2: Console.Clear(); Console.WriteLine(_menuItems[selectedMenuIndex - 1]); 
                         CheckInInput(); break;
-                    case 3: Console.Clear(); Console.WriteLine(_menuList[selectedMenuIndex - 1].Word); 
+                    case 3: Console.Clear(); Console.WriteLine(_menuItems[selectedMenuIndex - 1]); 
                         CountInOutputs(); break;
-                    case 4: Console.Clear(); Console.WriteLine(_menuList[selectedMenuIndex - 1].Word); 
+                    case 4: Console.Clear(); Console.WriteLine(_menuItems[selectedMenuIndex - 1]); 
                         _openedInputs.Clear(); InitInputFile(); break;
-                    case 5: Console.Clear(); Console.WriteLine(_menuList[selectedMenuIndex - 1].Word); 
+                    case 5: Console.Clear(); Console.WriteLine(_menuItems[selectedMenuIndex - 1]); 
                         LoadInput(); break;
-                    case 6: Console.Clear(); Console.WriteLine(_menuList[selectedMenuIndex - 1].Word); 
+                    case 6: Console.Clear(); Console.WriteLine(_menuItems[selectedMenuIndex - 1]); 
                         PrintInput(); break;
+                    case 7: Console.Clear(); Console.WriteLine(_menuItems[selectedMenuIndex - 1]);
+                        SelectTestType(_pdfNum); break;
                 }
                 Console.Clear();
             } while (selectedMenuIndex != 0);
