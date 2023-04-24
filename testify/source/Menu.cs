@@ -5,21 +5,19 @@ namespace testify.source
 {
     internal class Menu
     {
-        private uint _pdfNum ;
+        private uint _pdfNumber;
+        private static ushort _testNumber;
+        private static ushort _wordNumber;
+        
+        private bool _outputsExist;
+        private bool _inputMissing;
         
         private const string Input = "input";
         private const string Output = "output";
 
-        private readonly List<string> _menuItems = null!;
-        private readonly List<string> _testTypes = null!;
+        private readonly List<string> _menuItems = new();
+        private readonly List<string> _testTypes = new();
         private readonly List<string> _openedInputs = new();
-        
-        private static ushort _testNumber;
-        private static ushort _wordNumber;
-
-        private bool _outputsExist;
-        private bool _inputMissing;
-        
         private readonly List<Dictionary> _dictList = new();
 
         private StringBuilder InputPath { get; } = new();
@@ -152,16 +150,6 @@ namespace testify.source
             _outputsExist = true;
 
             Console.WriteLine("{0} tests are generated successfully.", _testNumber);
-            Console.WriteLine("PDF Types");
-            int counter = 1;
-            foreach (var it in _testTypes)
-            {
-                Console.WriteLine("{0}. {1}", counter, it);
-                counter++;
-            }
-            Console.Write("Select the test type:");
-            _pdfNum = Convert.ToUInt32(Console.ReadLine());
-            SelectTestType(_pdfNum);
             Console.Write("Press any key to continue...");
             Console.ReadKey();
         }
@@ -232,14 +220,10 @@ namespace testify.source
         {
             Console.Write("Opened input files: ");
             foreach (var str in _openedInputs)
-            {
                 Console.Write("{0} ", str);
-            }
             Console.WriteLine();
             foreach (var it in _dictList)
-            {
                 Console.WriteLine("{0}:\t{1}", it.WordId, it.Word);
-            }
             Console.Write("Press any key to continue...");
             Console.ReadKey();
         }
@@ -247,8 +231,8 @@ namespace testify.source
         private void Print()
         {
             Console.WriteLine(" __________________MENU____________________");
-            foreach (var i in Enumerable.Range(0, _menuItems.Count))
-                Console.WriteLine("| {0}", _menuItems[i]);
+            foreach (var it in Enumerable.Range(0, _menuItems.Count))
+                Console.WriteLine("{0}. | {1}",it , _menuItems[it]);
             Console.WriteLine(" __________________________________________");
         }
 
@@ -272,7 +256,7 @@ namespace testify.source
 
             //run the program and read the name of the input file
             Console.WriteLine("Testify\n");
-            do { InitInputFile(); }
+            do InitInputFile();
             while (_inputMissing);
             Console.Clear();
         }
@@ -282,14 +266,33 @@ namespace testify.source
             return str.Equals("*esc");
         }
 
-        private void SelectTestType(uint index)
+        private void SelectTestType()
         {
-            VerbForms v = new();
-            Translate t = new();
-            switch (index)
+            while (true)
             {
-                case 0: v.GenerateDoc(_dictList); break;
-                case 1: t.GenerateDoc(_dictList); break;
+                VerbForms v = new();
+                Translate t = new();
+
+                Console.WriteLine("PDF Types");
+                foreach (var it in Enumerable.Range(0, _testTypes.Count))
+                    Console.WriteLine("{0}. {1}", it, _testTypes[it]);
+
+                Console.Write("Select the test type:");
+                _pdfNumber = Convert.ToUInt32(Console.ReadLine());
+
+                switch (_pdfNumber)
+                {
+                    case 0:
+                        continue;
+                    case 1:
+                        v.GenerateDoc(_dictList);
+                        break;
+                    case 2:
+                        t.GenerateDoc(_dictList);
+                        break;
+                }
+
+                break;
             }
         }
 
@@ -313,23 +316,24 @@ namespace testify.source
                     if (e.Source != null)
                         Console.WriteLine("IOException source: {0}\nInvalid input.", e.Source);
                     throw;
-                }                
+                }
+                selectedMenuIndex--;
                 switch (selectedMenuIndex)
                 {
-                    case 1: Console.Clear(); Console.WriteLine(_menuItems[selectedMenuIndex - 1]); 
+                    case 1: Console.Clear(); Console.WriteLine(_menuItems[selectedMenuIndex]); 
                         GenerateTxt(); break;
-                    case 2: Console.Clear(); Console.WriteLine(_menuItems[selectedMenuIndex - 1]); 
+                    case 2: Console.Clear(); Console.WriteLine(_menuItems[selectedMenuIndex]); 
                         CheckInInput(); break;
-                    case 3: Console.Clear(); Console.WriteLine(_menuItems[selectedMenuIndex - 1]); 
+                    case 3: Console.Clear(); Console.WriteLine(_menuItems[selectedMenuIndex]); 
                         CountInOutputs(); break;
-                    case 4: Console.Clear(); Console.WriteLine(_menuItems[selectedMenuIndex - 1]); 
+                    case 4: Console.Clear(); Console.WriteLine(_menuItems[selectedMenuIndex]); 
                         _openedInputs.Clear(); InitInputFile(); break;
-                    case 5: Console.Clear(); Console.WriteLine(_menuItems[selectedMenuIndex - 1]); 
+                    case 5: Console.Clear(); Console.WriteLine(_menuItems[selectedMenuIndex]); 
                         LoadInput(); break;
-                    case 6: Console.Clear(); Console.WriteLine(_menuItems[selectedMenuIndex - 1]); 
+                    case 6: Console.Clear(); Console.WriteLine(_menuItems[selectedMenuIndex]); 
                         PrintInput(); break;
-                    case 7: Console.Clear(); Console.WriteLine(_menuItems[selectedMenuIndex - 1]);
-                        SelectTestType(_pdfNum); break;
+                    case 7: Console.Clear(); Console.WriteLine(_menuItems[selectedMenuIndex]);
+                        SelectTestType(); break;
                 }
                 Console.Clear();
             } while (selectedMenuIndex != 0);
